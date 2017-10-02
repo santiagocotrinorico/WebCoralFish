@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<meta charset="utf-8">
+		<title>Login Administrador</title>
+		<meta name="generator" content="Bootply" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/styles.css" rel="stylesheet">
+	</head>
+	<body>
+<div class="container">
+  
+  <div class="text-center">
+    <h1>Iniciar Sesión</h1>
+    <h2>Administrador</h2>
+  </div>
+			<center><img src="images/iconUsuario.png"></center>
+  		<div id="conte">
+    	<div class="row">
+			<div class="col-xs-8 col-xs-offset-2">
+				<form id="formlogin" method="POST">
+					<div class="center">
+						<div class="form-group">
+							<label for="usuario">Usuario </label>
+							<input type="text" class="form-control" id="usuario" name="usuario" placeholder="Nombre Usuario" required>
+						</div>
+						<div class="form-group">
+							<label for="contrasena">Contraseña</label>
+							<input type="password" class="form-control" id="contrasena" name="contrasena" placeholder="*****" required>
+						</div>
+						<button type="submit" id="login"	class="btn btn-default">Entrar</button>
+						<div id="respuesta">   </div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<br>
+ 
+  <br>
+</div><!-- /.container -->
+</div>
+	<!-- script references -->
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+
+
+		<script>
+$(document).ready(function(){
+
+
+                var form1 = $('#formlogin');
+                form1.submit(function () {
+                        $.ajax({
+                            type: "POST",
+                            url: "php/adminSession.php",
+                            data: form1.serialize(),
+                            success: function (data) {
+                                if(data=="loginExito"){
+                                    $(location).attr('href',"panelAdmin.php"); 
+                                }else{
+                                    $('#respuesta').html(data);
+                                    alert(data);
+                                }
+
+                            }
+                        });
+                        return false;
+                });
+
+});
+		</script>
+	</body>
+</html>

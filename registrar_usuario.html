@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<meta charset="utf-8">
+		<title>Navbar with Search</title>
+		<meta name="generator" content="Bootply" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/styles.css" rel="stylesheet">
+	</head>
+	<body>
+
+
+
+<div class="container">
+  
+  <div class="text-center">
+    <h1>Inscripción Usuario</h1>
+    <p class="lead">Ingrese información básica del nadador.</p>
+  </div>
+
+  		<div class="conte">
+        <form>
+    	<div class="row">
+		
+		
+
+
+            <div class="form-group">
+                <label for="Identificacion">Identificación </label>
+                <input type="text" class="form-control" id="Identificacion" name="Identificacion"  placeholder="Identificación / Ficha Fecna" required>
+            </div>
+            <div class="form-group">
+                <label for="Nombres">Nombres</label>
+                <input type="text" class="form-control" id="Nombres" name="Nombres" required>
+            </div>
+            <div class="form-group">
+                <label for="Apellidos">Apellidos</label>
+                <input type="text" class="form-control" id="Apellidos" name="Apellidos" required>
+            </div>
+            <div class="form-group">
+                <label for="Email">e-mail</label>
+                <input type="text" class="form-control" id="Email" name="Email" placeholder="ejemplo@dominio.com">
+            </div>
+            <div class="form-group">
+                <label for="Telefono">Teléfono</label>
+                <input type="text" class="form-control" id="Telefono" name="Telefono"  placeholder="Número telefónico o celular">
+            </div>
+            <div class="form-group">
+                <label for="FechaNacimiento">Fecha de Nacimiento</label>
+                <input type="date" class="form-control" id="FechaNacimiento" name="FechaNacimiento" required>
+            </div>
+           
+
+        </div>
+        <h2 class="section">Datos de Contacto</h2>
+        <div id="section2" >
+            <div class="form-group">
+            <div class="edit-options">
+            <div class="edit">
+                
+            </div>
+            <div class="delete">
+                
+            </div>
+            </div>
+            <label for="NombreContacto">Nombre Contacto</label>
+            <input type="text" class="form-control" id="NombreContacto" name="NombreContacto" placeholder="Nombre completo de un familiar o acudiente">
+            </div>
+            <div class="form-group">
+            <label for="TelefonoContacto">Teléfono de Contacto</label>
+            <input type="text" class="form-control" id="TelefonoContacto" name="TelefonoContacto" placeholder="Número telefónico de contacto">
+            </div>
+        </div>
+
+  <button type="submit" class="btn btn-default">Submit</button>
+</form>
+
+
+
+		</div>
+		</div>
+  
+  
+</div><!-- /.container -->
+	<!-- script references -->
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+	</body>
+	<script>
+$(document).ready(function(){
+    
+    $("#FechaNacimiento").change(function(){
+    		var FechaNacimiento= $("#FechaNacimiento").val();
+    		//var dia,mes,yyyy;
+    		//dia=FechaNacimiento.getDate();
+
+            alert("el dia es "+FechaNacimiento);
+            
+	});
+});
+</script>
+</html>

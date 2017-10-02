@@ -1,0 +1,44 @@
+body {
+  padding-top: 50px;
+}
+
+.container{
+
+	background-color: #FECE1A;
+	border-color: #A3A3A3;
+    border-radius: 47px;
+    border-style: solid;
+}
+
+input  {
+	background-color: #fff;
+  
+}
+.conte{
+	margin: 50px 150px 50px 150px;
+}
+
+@media (max-width: 480px) {
+	.conte{
+		margin: 15px 25px 15px 25px;
+	}
+
+}
+@media (max-width: 767px) {
+	.conte{
+		margin: 30px 50px 30px 50px;
+	}
+
+}
+
+.er {
+	display: none;
+}
+.ocultar{
+	display: none;
+}
+
+.mostrar{
+	display: block;
+}
+

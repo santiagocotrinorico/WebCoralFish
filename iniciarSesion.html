@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<meta charset="utf-8">
+		<title>Iniciar Sesión</title>
+		<meta name="generator" content="Bootply" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/styles.css" rel="stylesheet">
+	</head>
+	<body>
+
+
+
+<div class="container">
+  
+  <div class="text-center">
+    <h1>Iniciar Sesión</h1>
+  </div>
+
+  		<div id="conte">
+    	<div class="row">
+		
+		<form id="formlogin" method="POST">
+<div class="col-md-6 col-sm-6">
+            <div class="form-group">
+                <label for="usuario">Usuario </label>
+                <input type="text" class="form-control" id="usuario" name="usuario" placeholder="Nombre Usuario" required>
+            </div>
+            <div class="form-group">
+                <label for="contrasena">Contraseña</label>
+                <input type="password" class="form-control" id="contrasena" name="contrasena"  required placeholder="*****" >
+            </div>
+           
+
+  <button type="submit" id="login"	class="btn btn-default">Entrar</button>
+<div id="respuesta">   </div>
+
+  </div>
+
+<div class="col-md-6 col-sm-6">
+	<p>Bienvenido al Sistema de Gestión Coral Fish. Tenemos el gusto de darle una calurosa bienvenida en la participación del Festival de Natación Coral Fish y agradece su valiosa participación. </p>
+    </br>
+
+    <p>Para ingresar al sistema e iniciar con el proceso de inscripción de sus competidores, es necesario que ingrese el usuario y la contraseña proporcionada por los organizadores del evento.</p>
+    </br>
+    <p>Si tiene inconvenientes al acceder a nuestro sistema, por favor comunicarse al siguiente correo: sacory16@gmail.com</p></br>
+</div>
+
+</form>
+
+		</div>
+		<br>
+ <div class="row">
+ 	<div class="col-md-12 col-sm-12">
+	
+	<img src="images/bannerCoralFish.jpg" class="img-responsive container" alt="Responsive image">
+</div>
+
+ </div> 
+  <br>
+</div><!-- /.container -->
+	<!-- script references -->
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+
+
+		<script>
+$(document).ready(function(){
+
+
+                var form1 = $('#formlogin');
+                form1.submit(function () {
+                        $.ajax({
+                            type: "POST",
+                            url: "php/sesion.php",
+                            data: form1.serialize(),
+                            success: function (data) {
+                                if(data=="loginExito"){
+                                    $(location).attr('href',"inscribir_competidor.php"); 
+                                }else{
+                                    $('#respuesta').html(data);
+                                    alert(data);
+                                }
+
+                            }
+                        });
+                        return false;
+                });
+
+});
+		</script>
+	</body>
+</html>
