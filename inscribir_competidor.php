@@ -7,10 +7,8 @@ if ($resultado = mysqli_query($enlace, "SELECT jornada FROM jornadas_pruebas gro
     mysqli_free_result($resultado);
 }
 
-
 mysqli_close($enlace);
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
