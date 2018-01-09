@@ -24,7 +24,7 @@ function Header()
     $this->Ln(1);
     $this->SetFont('Arial','',10);
     $this->Cell(6);
-    $this->Cell(180,5,'Calentamiento: 08:00 a.m. Competencias: 09:00 a.m. / Piscina 50 mts','B',1,'C');
+    $this->Cell(180,5,utf8_decode('Calentamiento: 08:00 a.m. Sesión Competencias: 09:00 a.m. / Piscina 50 mts'),'B',1,'C');
     $this->Cell(180,5,utf8_decode('Piscinas Olímpicas, Complejo Deportivo José Eustasio Rivera - Villavicencio (Meta)'),'0',1,'C');
     // Salto de línea
     $this->Ln(10);
@@ -100,17 +100,19 @@ $id_y_pruebas = mysqli_query($enlace, "SELECT i.id,jornada,i.prueba,p.prueba as 
 
 
 while($rowpruebas = mysqli_fetch_assoc($id_y_pruebas)){
-$this->SetFont('Times','',12);
+$this->SetFont('Times','',14);
+
 
 if($jornadas!=$rowpruebas["jornada"]){
 	$jornadas=$rowpruebas["jornada"];
-	$this->Cell(40,9,"Jornada".$jornadas,0,1);
+	$this->Ln(5);
+    $this->Cell(40,9," Jornada # ".$jornadas,'B',1,'C');
 }
 
 
 $this->SetFont('Times','B',11);
 $this->Cell(40,7,$cont." (".$rowpruebas['genero'].") ".$rowpruebas['categoria'],0,2,'C');
-$this->Cell(40,5,utf8_decode($rowpruebas['nombre']),0,1,'C');
+$this->Cell(40,5,utf8_decode($rowpruebas['nombre']),0,1);
 $cont++;
 
 $resulParaWhereIN = mysqli_query ($enlace,"SELECT * FROM union_categorias WHERE id_nombre=".$rowpruebas['id_categoria']);
@@ -280,7 +282,7 @@ function PrintChapter( )
 
 $pdf = new PDF();
 //nombre del archivo PDF
-$title = utf8_decode('Programación Campeonato ...');
+$title = utf8_decode('Programación Festi-Torneo Caribes');
 $pdf->SetTitle($title);
 $pdf->SetAuthor('CoralFish');
 $pdf->PrintChapter();

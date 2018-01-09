@@ -13,7 +13,7 @@ function Header()
 {
 
     // Logo
-    $this->Image('../images/LogoCoralFish.png',20,8,25);
+    $this->Image('../images/LogoCaribes.png',20,8,25);
     // Arial bold 15
     $this->SetFont('Arial','B',15);
     // Movernos a la derecha
@@ -21,8 +21,8 @@ function Header()
     // Título
     $this->Cell(180,10,utf8_decode('Reporte de Inscripción'),0,1,'C');
     $this->SetFont('Arial','',12);
-    $this->Cell(180,5,utf8_decode('VI Festival de Natación Coral Fish'),0,1,'C');
-    $this->Cell(180,5,'Junio 3 de 2017',0,1,'C');
+    $this->Cell(180,5,utf8_decode('I Festi-Torneo de Natación Caribes'),0,1,'C');
+    $this->Cell(180,5,'Octubre 28 de 2017',0,1,'C');
     $this->Ln(1);
     $this->SetFont('Arial','',10);
     $this->Cell(6);
