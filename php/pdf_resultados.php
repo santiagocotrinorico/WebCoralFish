@@ -87,8 +87,10 @@ global $enlace;
 $jornadas="";
 $cont = 1;
 
-/*$id_y_pruebas = mysqli_query($enlace, "SELECT c.prueba As id, p.prueba FROM competencia c, pruebas p, competidor cdor where c.prueba=p.id AND c.competidor=cdor.identificacion AND cdor.genero=\"".$genero."\" GROUP BY c.prueba" );*/
-$id_y_pruebas = mysqli_query($enlace, "SELECT i.id,jornada,i.prueba,p.prueba as nombre,UPPER(i.genero) as genero,n.id as id_categoria,n.nombre as categoria FROM jornadas_pruebas i, pruebas p, nombre_categoria n WHERE i.prueba=p.id AND i.categoria=n.id ORDER by i.id ASC " );
+/*$id_y_pruebas = mysqli_query($enlace, "SELECT c.prueba As id, p.prueba FROM competencia c, pruebas p, competidor cdor where c.prueba=p.id AND 
+c.competidor=cdor.identificacion AND cdor.genero=\"".$genero."\" GROUP BY c.prueba" );*/
+$id_y_pruebas = mysqli_query($enlace, "SELECT i.id,jornada,i.prueba,p.prueba as nombre,UPPER(i.genero) as genero,n.id as id_categoria,n.nombre as categoria 
+FROM jornadas_pruebas i, pruebas p, nombre_categoria n WHERE i.prueba=p.id AND i.categoria=n.id ORDER by i.id ASC " );
 
 
 while($rowpruebas = mysqli_fetch_assoc($id_y_pruebas)){
@@ -107,7 +109,9 @@ $this->SetFont('Times','',11);
 
 $cont++;
 $id_jornada_prueba=$rowpruebas['id'];
-		$sql="SELECT comp.identificacion ,concat_ws(' ',comp.nombres,comp.apellidos) AS nombre, cl.abreviatura,result.tiempo FROM resultados result, competidor comp ,competencia comcia,clubs cl where id_jornada_prueba=$id_jornada_prueba AND result.id_competidor=comp.identificacion AND comcia.club=cl.id AND comcia.competidor= comp.identificacion GROUP by comp.identificacion ORDER BY result.tiempo ASC";    
+		$sql="SELECT comp.identificacion ,concat_ws(' ',comp.nombres,comp.apellidos) AS nombre, cl.abreviatura,result.tiempo FROM resultados result, 
+competidor comp ,competencia comcia,clubs cl where id_jornada_prueba=$id_jornada_prueba AND result.id_competidor=comp.identificacion AND 
+comcia.club=cl.id AND comcia.competidor= comp.identificacion GROUP by comp.identificacion ORDER BY result.tiempo ASC";    
 
 		$result1 = mysqli_query($enlace, $sql );
 
@@ -115,7 +119,16 @@ $con=0;
 $tiempo ="";
 $con2 = -1;
 
+//Variable para guadar el puntaje obtenido inicia con el puntaje maximo
+$puntos = 9;
 		while($row1 = mysqli_fetch_assoc($result1)){
+			
+			//Preguntar si es 8
+			if($puntos == 8){
+				$puntos = $puntos - 1;
+			}
+			
+			
 			$con++;
 				$this->SetFont('Times','',8);
 
@@ -132,12 +145,9 @@ $con2 = -1;
                         $con2 = -1;
                     }
                 }
-
-
-
-
-
-
+			
+			
+			
             $nomCom = "";
             if(strlen(utf8_decode($row1["nombre"]))>26) {
                 $nomCom = substr(utf8_decode($row1["nombre"]), 0, 26)."...";
@@ -156,11 +166,18 @@ $con2 = -1;
                 }elseif ($row1["tiempo"]=="99.99.99"){
                     $this->Cell(15,4,"N.S",0,1);
                 }else{
-                    $this->Cell(15,4,($row1["tiempo"]),0,1);
+                    $this->Cell(15,4,($row1["tiempo"]."   (".$puntos."Pts)"),0,1);
                 }
-
-
+	
 				$tiempo = $row1["tiempo"];
+				
+				$puntos = $puntos - 1;
+				
+				if($puntos < 0)
+				{
+					$puntos = 0;
+				}
+				
 		}
 
 
