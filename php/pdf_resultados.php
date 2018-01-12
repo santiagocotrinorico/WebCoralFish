@@ -1,6 +1,7 @@
 <?php
 include 'connect.php';
 require('fpdf/fpdf.php');
+require('Puntos.php');
 
 class PDF extends FPDF
 {
@@ -109,7 +110,7 @@ $this->SetFont('Times','',11);
 
 $cont++;
 $id_jornada_prueba=$rowpruebas['id'];
-		$sql="SELECT comp.identificacion ,concat_ws(' ',comp.nombres,comp.apellidos) AS nombre, cl.abreviatura,result.tiempo FROM resultados result, 
+		$sql="SELECT comp.identificacion ,concat_ws(' ',comp.nombres,comp.apellidos) AS nombre, cl.abreviatura, cl.id AS club, result.tiempo FROM resultados result, 
 competidor comp ,competencia comcia,clubs cl where id_jornada_prueba=$id_jornada_prueba AND result.id_competidor=comp.identificacion AND 
 comcia.club=cl.id AND comcia.competidor= comp.identificacion GROUP by comp.identificacion ORDER BY result.tiempo ASC";    
 
@@ -122,17 +123,13 @@ $con2 = -1;
 //Variable para guadar el puntaje obtenido inicia con el puntaje maximo
 $puntos = 9;
 		while($row1 = mysqli_fetch_assoc($result1)){
-			
 			//Preguntar si es 8
 			if($puntos == 8){
 				$puntos = $puntos - 1;
 			}
-			
-			
 			$con++;
 				$this->SetFont('Times','',8);
-
-
+				
 				if($row1["tiempo"]=="99.99.99"||$row1["tiempo"]=="99.99.98"){
                     $this->Cell(3,4,'  ',0,0);
                 }else{
@@ -145,9 +142,7 @@ $puntos = 9;
                         $con2 = -1;
                     }
                 }
-			
-			
-			
+
             $nomCom = "";
             if(strlen(utf8_decode($row1["nombre"]))>26) {
                 $nomCom = substr(utf8_decode($row1["nombre"]), 0, 26)."...";
@@ -177,12 +172,8 @@ $puntos = 9;
 				{
 					$puntos = 0;
 				}
-				
 		}
-
-
-    $this->Ln();
-
+		$this->Ln();
 
 }
 mysqli_free_result($id_y_pruebas);
@@ -190,14 +181,141 @@ mysqli_free_result($id_y_pruebas);
     $this->Ln();
     // Cita en itálica
     $this->SetFont('','I');
-    $this->Cell(0,5,'(fin del extracto)');
+    //$this->Cell(0,5,'(fin del extracto)');
     // Volver a la primera columna
     $this->SetCol(0);
+	
+	//////////////////////////////////////////////////
+	//CLASIFICACIÓN CLUBES POR PUNTOS
+	$this->AddPage();	
+	$puesto = 1;
+	$i = 0;
+	$resultado;
+	
+	$clubs = mysqli_query($enlace, "SELECT DISTINCT club.id, club.club FROM competencia comp, clubs club where comp.club = club.id " );
+	$this->SetFont('Times','B',11);
+	$this->Cell(180,5,utf8_decode('CLASIFICACIÓN CLUBES POR PUNTOS'),0,1,'C');
+	$this->Ln();
+	$this->Cell(20,4,"Puesto",0,0);
+	$this->Cell(100,4,"Club",0,0);
+	$this->Cell(10,4,"M" ,0,0);
+	$this->Cell(10,4,"F" ,0,0);
+	$this->Cell(5,4,"Pts." ,0,0);
+	$this->Ln();
+	$this->SetFont('Times','',11);
+	while($rowclubs = mysqli_fetch_assoc($clubs)){
+		
+		
+		$hombres = 0;
+		$mujeres = 0;
+			
+		$club = $rowclubs['id'];
+		
+		$sql="SELECT * FROM resultados r
+				INNER JOIN jornadas_pruebas jp on jp.id = r.id_jornada_prueba
+				INNER JOIN competencia cia on (cia.prueba = jp.prueba and cia.competidor = r.id_competidor)
+				INNER JOIN competidor dor on dor.identificacion = r.id_competidor
+				where cia.club = $club";    
+
+		$competencias = mysqli_query($enlace, $sql );
+		
+		while($competencia = mysqli_fetch_assoc($competencias)){
+			$prueba = $competencia['id_jornada_prueba'];
+			$competidor = $competencia['id_competidor'];
+			
+			$posicion = $this->calcularPosicion($prueba, $competidor);
+			$puntos = 0;
+			switch ($posicion) {
+				case 1:
+					$puntos = 9;
+					break;
+				case 2:
+					$puntos = 7;
+					break;
+				case 3:
+					$puntos = 6;
+					break;
+				case 4:
+					$puntos = 5;
+					break;
+				case 5:
+					$puntos = 4;
+					break;
+				case 6:
+					$puntos = 3;
+					break;
+				case 7:
+					$puntos = 2;
+					break;
+				case 8:
+					$puntos = 1;
+					break;
+			}
+			if($competencia['genero'] == 'm'){
+				$hombres = $hombres + $puntos;
+			}
+			else{
+				$mujeres = $mujeres + $puntos;
+			}
+		}
+		
+		$total = $hombres + $mujeres;
+		
+		$clase = new Puntos();
+		$clase->setNombreClub(utf8_decode($rowclubs["club"]));
+		$clase->setMasculino($hombres);
+		$clase->setFemenino($mujeres);
+		$clase->setTotal($hombres);
+		$resultado[$i] = $clase;
+		$i++;
+		
+	}
+	
+	//Ordenar por puntos ASC
+	for($i=1;$i<sizeof($resultado);$i++)
+	{
+		for($j=0;$j<sizeof($resultado)-$i;$j++)
+		{
+			if($resultado[$j]->getTotal()<$resultado[$j+1]->getTotal())
+			{
+				$k=$resultado[$j+1];
+				$resultado[$j+1]=$resultado[$j];
+				$resultado[$j]=$k;
+			}
+		}
+	}
+
+	for($i=0;$i<sizeof($resultado);$i++){
+		$pruntos = $resultado[$i];
+		$this->Cell(20,4,$puesto,0,0);
+		$this->Cell(100,4,$pruntos->getNombreClub(),0,0);
+		$this->Cell(10,4,$pruntos->getMasculino(),0,0);
+		$this->Cell(10,4,$pruntos->getFemenino(),0,0);
+		$this->Cell(5,4,$pruntos->getTotal(),0,0);
+		
+		$this->Ln();
+		
+		$puesto++;
+	}
+	//END CLASIFICACIÓN CLUBES POR PUNTOS
+	/////////////////////////////////////////////////////////	  
 }
 
-
-
-
+function calcularPosicion($id_jornada_prueba, $id_competidor)
+{
+	global $enlace;
+	$sql="SELECT comp.identificacion ,concat_ws(' ',comp.nombres,comp.apellidos) AS nombre, cl.abreviatura,result.tiempo FROM resultados result, 
+	competidor comp ,competencia comcia,clubs cl where id_jornada_prueba=$id_jornada_prueba AND result.id_competidor=comp.identificacion AND 
+	comcia.club=cl.id AND comcia.competidor= comp.identificacion GROUP by comp.identificacion ORDER BY result.tiempo ASC";    
+	$resultados = mysqli_query($enlace, $sql );
+	$posicion = 0;
+	while($resultado = mysqli_fetch_assoc($resultados)){
+		$posicion ++;
+		if($resultado["identificacion"] == $id_competidor){
+			return $posicion;
+		}
+	}
+}
 
 function PrintChapter( )
 {
