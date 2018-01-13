@@ -1,7 +1,7 @@
 <?php
 include 'connect.php';
 require('fpdf/fpdf.php');
-require('Puntos.php');
+require('Resultados.php');
 
 class PDF extends FPDF
 {
@@ -186,29 +186,26 @@ mysqli_free_result($id_y_pruebas);
     $this->SetCol(0);
 	
 	//////////////////////////////////////////////////
-	//CLASIFICACIÓN CLUBES POR PUNTOS
-	$this->AddPage();	
+	//OBTENER PUNTOS Y MEDALLAS
+	/////////////////////////////////////////////////
 	$puesto = 1;
 	$i = 0;
 	$resultado;
 	
 	$clubs = mysqli_query($enlace, "SELECT DISTINCT club.id, club.club FROM competencia comp, clubs club where comp.club = club.id " );
-	$this->SetFont('Times','B',11);
-	$this->Cell(180,5,utf8_decode('CLASIFICACIÓN CLUBES POR PUNTOS'),0,1,'C');
-	$this->Ln();
-	$this->Cell(20,4,"Puesto",0,0);
-	$this->Cell(100,4,"Club",0,0);
-	$this->Cell(10,4,"M" ,0,0);
-	$this->Cell(10,4,"F" ,0,0);
-	$this->Cell(5,4,"Pts." ,0,0);
-	$this->Ln();
-	$this->SetFont('Times','',11);
+	
 	while($rowclubs = mysqli_fetch_assoc($clubs)){
 		
-		
+		//Puntos
 		$hombres = 0;
 		$mujeres = 0;
-			
+		
+		//Medallas
+		$oro = 0;
+		$plata = 0;
+		$bronce = 0;
+		
+		//Obtener el id del club
 		$club = $rowclubs['id'];
 		
 		$sql="SELECT * FROM resultados r
@@ -228,12 +225,15 @@ mysqli_free_result($id_y_pruebas);
 			switch ($posicion) {
 				case 1:
 					$puntos = 9;
+					$oro = $oro + 1;
 					break;
 				case 2:
 					$puntos = 7;
+					$plata = $plata + 1;
 					break;
 				case 3:
 					$puntos = 6;
+					$bronce = $bronce + 1;
 					break;
 				case 4:
 					$puntos = 5;
@@ -259,24 +259,48 @@ mysqli_free_result($id_y_pruebas);
 			}
 		}
 		
-		$total = $hombres + $mujeres;
+		$total_puntos = $hombres + $mujeres;
+		$total_medallas = $oro + $plata + $bronce;
 		
-		$clase = new Puntos();
+		
+		$clase = new Resultados();
 		$clase->setNombreClub(utf8_decode($rowclubs["club"]));
+		
 		$clase->setMasculino($hombres);
 		$clase->setFemenino($mujeres);
-		$clase->setTotal($hombres);
+		$clase->setPuntos($total_puntos);
+		
+		$clase->setOro($oro);
+		$clase->setPlata($plata);
+		$clase->setBronce($bronce);
+		$clase->setMedallas($total_medallas);
+		
 		$resultado[$i] = $clase;
 		$i++;
 		
 	}
+	
+	//////////////////////////////////////////////////
+	//CLASIFICACIÓN POR PUNTOS
+	/////////////////////////////////////////////////
+    $this->AddPage();
+	$this->SetFont('Times','B',11);
+	$this->Cell(180,5,utf8_decode('CLASIFICACIÓN CLUBES POR PUNTOS'),0,1,'C');
+	$this->Ln();
+	$this->Cell(20,4,"Puesto",0,0);
+	$this->Cell(100,4,"Club",0,0);
+	$this->Cell(10,4,"M" ,0,0);
+	$this->Cell(10,4,"F" ,0,0);
+	$this->Cell(5,4,"Pts" ,0,0);
+	$this->Ln();
+	$this->SetFont('Times','',11);
 	
 	//Ordenar por puntos ASC
 	for($i=1;$i<sizeof($resultado);$i++)
 	{
 		for($j=0;$j<sizeof($resultado)-$i;$j++)
 		{
-			if($resultado[$j]->getTotal()<$resultado[$j+1]->getTotal())
+			if($resultado[$j]->getPuntos()<$resultado[$j+1]->getPuntos())
 			{
 				$k=$resultado[$j+1];
 				$resultado[$j+1]=$resultado[$j];
@@ -291,16 +315,60 @@ mysqli_free_result($id_y_pruebas);
 		$this->Cell(100,4,$pruntos->getNombreClub(),0,0);
 		$this->Cell(10,4,$pruntos->getMasculino(),0,0);
 		$this->Cell(10,4,$pruntos->getFemenino(),0,0);
-		$this->Cell(5,4,$pruntos->getTotal(),0,0);
+		$this->Cell(5,4,$pruntos->getPuntos(),0,0);
 		
 		$this->Ln();
 		
 		$puesto++;
 	}
-	//END CLASIFICACIÓN CLUBES POR PUNTOS
-	/////////////////////////////////////////////////////////	  
+	//////////////////////////////////////////////////
+	//CLASIFICACIÓN POR MEDALLAS
+	/////////////////////////////////////////////////	  
+	$this->AddPage();	
+	$this->SetFont('Times','B',11);
+	$this->Cell(180,5,utf8_decode('CLASIFICACIÓN CLUBES POR MEDALLAS'),0,1,'C');
+	$this->Ln();
+	$this->Cell(20,4,"Puesto",0,0);
+	$this->Cell(100,4,"Club",0,0);
+	$this->Cell(15,4,"Oro" ,0,0);
+	$this->Cell(15,4,"Plata" ,0,0);
+	$this->Cell(15,4,"Bronce" ,0,0);
+	$this->Cell(5,4,"Medallas" ,0,0);
+	$this->Ln();
+	$this->SetFont('Times','',11);
+	
+	$puesto = 1;
+	
+	//Ordenar por medallas ASC
+	for($i=1;$i<sizeof($resultado);$i++)
+	{
+		for($j=0;$j<sizeof($resultado)-$i;$j++)
+		{
+			if($resultado[$j]->getMedallas()<$resultado[$j+1]->getMedallas())
+			{
+				$k=$resultado[$j+1];
+				$resultado[$j+1]=$resultado[$j];
+				$resultado[$j]=$k;
+			}
+		}
+	}
+
+	for($i=0;$i<sizeof($resultado);$i++){
+		$medallas = $resultado[$i];
+		$this->Cell(20,4,$puesto,0,0);
+		$this->Cell(100,4,$medallas->getNombreClub(),0,0);
+		$this->Cell(15,4,$medallas->getOro(),0,0);
+		$this->Cell(15,4,$medallas->getPlata(),0,0);
+		$this->Cell(15,4,$medallas->getBronce(),0,0);
+		$this->Cell(5,4,$medallas->getMedallas(),0,0);
+		
+		$this->Ln();
+		
+		$puesto++;
+	}
 }
 
+//FUNCION QUE RETORNA LA POSICION DE UN COMPETIDOR EN UNA PRUEBA
 function calcularPosicion($id_jornada_prueba, $id_competidor)
 {
 	global $enlace;
