@@ -376,10 +376,25 @@ function calcularPosicion($id_jornada_prueba, $id_competidor)
 	comcia.club=cl.id AND comcia.competidor= comp.identificacion GROUP by comp.identificacion ORDER BY result.tiempo ASC";    
 	$resultados = mysqli_query($enlace, $sql );
 	$posicion = 0;
+	$tiempo_anterior = "";
+	$posicion_aux = -1;
+	$result = 0;
 	while($resultado = mysqli_fetch_assoc($resultados)){
 		$posicion ++;
+		if($tiempo_anterior == $resultado["tiempo"]){
+			if($posicion_aux == -1)
+			{
+				$posicion_aux = $posicion - 1;
+			    $result = $posicion_aux;	
+			}
+		    $result = $posicion_aux;
+		}
+		else{
+			$posicion_aux = -1;
+			$result = $posicion;
+		}
 		if($resultado["identificacion"] == $id_competidor){
-			return $posicion;
+			return $result;
 		}
 	}
 }
