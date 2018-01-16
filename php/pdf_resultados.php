@@ -165,12 +165,7 @@ $puntos = 0;
 	
 				$tiempo = $row1["tiempo"];
 				
-				$puntos = $puntos - 1;
 				
-				if($puntos < 0)
-				{
-					$puntos = 0;
-				}
 		}
 		$this->Ln();
 
@@ -307,18 +302,38 @@ mysqli_free_result($id_y_pruebas);
 			}
 		}
 	}
+	
+	$puesto = 0;
+	$puntos_anterior = "";
+	$puesto_aux = -1;
+	$result = 0;
 
 	for($i=0;$i<sizeof($resultado);$i++){
+		$puesto++;
 		$pruntos = $resultado[$i];
-		$this->Cell(20,4,$puesto,0,0);
+	    if($puntos_anterior == $pruntos->getPuntos()){
+			if($puesto_aux == -1)
+			{
+				$puesto_aux = $puesto - 1;
+			    $result = $puesto_aux;	
+			}
+		    $result = $puesto_aux;
+		}
+		else{
+			$puesto_aux = -1;
+			$result = $puesto;
+		}
+		
+		$puntos_anterior = $pruntos->getPuntos();
+			
+		$this->Cell(20,4,$result,0,0);
 		$this->Cell(100,4,$pruntos->getNombreClub(),0,0);
 		$this->Cell(10,4,$pruntos->getMasculino(),0,0);
 		$this->Cell(10,4,$pruntos->getFemenino(),0,0);
 		$this->Cell(5,4,$pruntos->getPuntos(),0,0);
 		
 		$this->Ln();
-		
-		$puesto++;
+	
 	}
 	//////////////////////////////////////////////////
 	//CLASIFICACIÓN POR MEDALLAS
@@ -353,6 +368,7 @@ mysqli_free_result($id_y_pruebas);
 	}
 
 	for($i=0;$i<sizeof($resultado);$i++){
+		
 		$medallas = $resultado[$i];
 		$this->Cell(20,4,$puesto,0,0);
 		$this->Cell(100,4,$medallas->getNombreClub(),0,0);
@@ -396,6 +412,7 @@ function calcularPosicion($id_jornada_prueba, $id_competidor)
 		if($resultado["identificacion"] == $id_competidor){
 			return $result;
 		}
+		$tiempo_anterior = $resultado["tiempo"];
 	}
 }
 
