@@ -358,11 +358,34 @@ mysqli_free_result($id_y_pruebas);
 	{
 		for($j=0;$j<sizeof($resultado)-$i;$j++)
 		{
-			if($resultado[$j]->getMedallas()<$resultado[$j+1]->getMedallas())
+			
+			if($resultado[$j]->getOro()<$resultado[$j+1]->getOro())
 			{
 				$k=$resultado[$j+1];
 				$resultado[$j+1]=$resultado[$j];
 				$resultado[$j]=$k;
+			}
+			else{
+				if($resultado[$j]->getOro()==$resultado[$j+1]->getOro())
+				{
+					if($resultado[$j]->getPlata()<$resultado[$j+1]->getPlata())
+					{
+						$k=$resultado[$j+1];
+						$resultado[$j+1]=$resultado[$j];
+						$resultado[$j]=$k;
+					}
+					else{
+						if($resultado[$j]->getPlata()==$resultado[$j+1]->getPlata())
+						{
+							if($resultado[$j]->getBronce()<$resultado[$j+1]->getBronce())
+							{
+								$k=$resultado[$j+1];
+								$resultado[$j+1]=$resultado[$j];
+								$resultado[$j]=$k;
+							}
+						}
+					}
+				}					
 			}
 		}
 	}
