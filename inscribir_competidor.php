@@ -163,20 +163,23 @@ ajaxtabla();
 				stringpruebas=stringpruebas+"<div class=\"row\"><div class=\"form-group col-xs-6\" id=\"j"+i+"\">               <h4 class=\"section\">Jornada "+i+"</h4><div id=\"select1J"+i+"\"></div><br><div id=\"select2J"+i+"\"> <select class=\"form-control ocultar\" id=\"prueba2"+i+"\" name=\"prueba2"+i+"\"  onchange=\"select2("+i+")\" ><option value=\"0\">Seleccione una Prueba</option></select></div></div>     <div class=\"form-group col-xs-6 ocultar\" id=\"tiempos"+i+"\"> <h4 class=\"section\">Tiempos "+i+"</h4>  <input type=\"text\" class=\"form-control tiempo\" id=\"tiempo1"+i+"\" name=\"tiempo1"+i+"\" placeholder=\"00.00.00\" maxlength=\"8\">  <br>  <input type=\"text\" class=\"form-control tiempo ocultar\" id=\"tiempo2"+i+"\" name=\"tiempo2"+i+"\" placeholder=\"00.00.00\" maxlength=\"8\">         </div></div>";
 			};
 
-
-			for (var a = 1; a <= limite; a++) {
-				ajaxss(a);
-			}
-
+			$("#fechaNacimiento").change(function(){
+			    categorioByEdad($("#fechaNacimiento").val());
+				
+				//mostrar pruebas si cambia categoria
+			  	mostrarPruebas(limite);
+			});
+			
+			//Validar si cambia el genero
+			$( "input" ).on( "click", function() {
+			  //alert( $( "input:checked" ).val() + " is checked!" );
+			  
+			    //mostrar pruebas si cambia genero
+			  	mostrarPruebas(limite);
+			});
+			
 
 			$("#pruebas").html(stringpruebas);
-
-
-			$("#fechaNacimiento").change(function(){
-			    		categorioByEdad($("#fechaNacimiento").val());
-
-  
-				});
 
             $("#identificacion").change(function(){
 
@@ -200,66 +203,66 @@ ajaxtabla();
                       }else{
                             $("#operacion").val("insertCompetidor");
                       }
-console.log( $("#operacion").val());
+					  console.log( $("#operacion").val());
                     });
 
             });
 
-                var form1 = $('#formComperitor');
-                form1.submit(function (event) {
+			var form1 = $('#formComperitor');
+			form1.submit(function (event) {
 
-                  var bandera = true;
+			  var bandera = true;
 
-                      event.preventDefault();
-                     $(".tiempo").each(function(indice,value ){
-                          if($(value).val()!=""){
-                            
-                            if(/((\d\d)\.){2}(\d\d){1}/g.test($(value).val())){
+				  event.preventDefault();
+				 $(".tiempo").each(function(indice,value ){
+					  if($(value).val()!=""){
+						
+						if(/((\d\d)\.){2}(\d\d){1}/g.test($(value).val())){
 
-                            }else{
-                                bandera=false;
-                            }
-                          }
-                      });
-                  if(bandera){
-                        $.ajax({
-                            type: "POST",
-                            url: "php/CRUD.php",
-                            data: form1.serialize()+"& categoria="+$("#categoria").val(),
-                            success: function (data) {
-                                if(data=="exito"){
-                                    $('#respuestains').text(" El registro fue Exitoso. si desea registrar otro competidor llene nuevamente el formulario"); 
-                                    $( "body" ).scrollTop( 150 );
-                                    $("#identificacion").val("");
-                                    $("#nombres").val("");
-                                    $("#apellidos").val("");
-                                    $("#fechaNacimiento").val("");
-                                    ajaxtabla();
+						}else{
+							bandera=false;
+						}
+					  }
+				  });
+			  if(bandera){
+					$.ajax({
+						type: "POST",
+						url: "php/CRUD.php",
+						data: form1.serialize()+"& categoria="+$("#categoria").val(),
+						success: function (data) {
+							if(data=="exito"){
+								$('#respuestains').text(" El registro fue Exitoso. si desea registrar otro competidor llene nuevamente el formulario"); 
+								$( "body" ).scrollTop( 150 );
+								$("#identificacion").val("");
+								$("#nombres").val("");
+								$("#apellidos").val("");
+								$("#fechaNacimiento").val("");
+								ajaxtabla();
 
-                                    for (var i = 1; i <= limite; i++) {
+								for (var i = 1; i <= limite; i++) {
 
-                                        $("#tiempo1"+i).val("");
-                                        $("#tiempo2"+i).val("");
-                                        $("#prueba"+i).val(0);
-                                        select1(i);
-                                    }
-                                      ajaxtabla();
-                                      
-                                }else if(data=="error interno"){
-                                    $('#respuestains').text(" Error interno intentelo nuevamente ");
-                                    
-                                }else {
-                                    $('#respuestains').text(data);
-                                }
+									$("#tiempo1"+i).val("");
+									$("#tiempo2"+i).val("");
+									$("#prueba"+i).val(0);
+									select1(i);
+								}
+								  ajaxtabla();
+								  
+							}else if(data=="error interno"){
+								$('#respuestains').text(" Error interno intentelo nuevamente ");
+								
+							}else {
+								$('#respuestains').text(data);
+							}
 
-                            }
-                        });
-                  }else{
-                      alert("Corregir los ERRORES para poder continuar");
-                  }
+						}
+					});
+			  }else{
+				  alert("Corregir los ERRORES para poder continuar");
+			  }
 
-                        //return false;
-                });
+					//return false;
+			});
 
 
 });
@@ -308,9 +311,9 @@ function categorioByEdad(FechaNacimiento){
 
 }
 
-function ajaxss(a){
+function ajaxss(a, b, c){
 			$.ajax({
-			  url: "php/pruebas.php?valor="+a,
+			  url: "php/pruebas.php?jornada="+a+"&genero="+b+"&categoria="+c,
 			  context: document.body
 			}).done(function(data) {
 			  $( "#select1J"+a ).html( data );
@@ -331,8 +334,7 @@ function ajaxtabla(){
 
 function select1(num){
 //alert("el valor del selec es"+$("#Categoria"+num).val());
-
-	if($("#prueba"+num).val()!=0){
+	if($("#prueba"+num).val()>0){
 		$( "#prueba2"+num ).removeClass( "ocultar" ).addClass( "mostrar" );
 		$( "#tiempos"+num ).removeClass( "ocultar" ).addClass( "mostrar" );
 		$("#prueba2"+num).empty();
@@ -348,12 +350,34 @@ function select1(num){
 function select2(num){
 //alert("el valor del selec es"+$("#Categoria"+num).val());
 
-	if($("#prueba2"+num).val()!=0){
+	if($("#prueba2"+num).val()>0){
 		$( "#tiempo2"+num ).removeClass( "ocultar" ).addClass( "mostrar" );
 	}else{
 		$("#tiempo2"+num ).removeClass( "mostrar" ).addClass( "ocultar" );
 
 	}
+}
+
+function mostrarPruebas(limite){
+	
+	var genero = $( "input:checked" ).val();
+	var categoria = $( "#categoria" ).val();
+	
+	if($( "input:checked" ).val()>0)
+	{
+		if(genero==1){
+				genero="m";
+			}else{
+				genero="f";
+			}
+			for (var a = 1; a <= limite; a++) {
+				ajaxss(a, genero, categoria);
+				
+				select1(a);
+				select2(a);
+			}
+	}	
+	
 }
 
 
