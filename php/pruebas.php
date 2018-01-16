@@ -11,7 +11,7 @@ $num= $_GET["jornada"];
 $genero= $_GET["genero"];
 $categoria= $_GET["categoria"];
 /*$result = mysqli_query($enlace, "SELECT p.id, p.prueba FROM jornadas_pruebas jp,pruebas p WHERE jp.jornada=".$num." and jp.prueba=p.id");*/
-$result = mysqli_query($enlace, "SELECT p.id, p.prueba FROM jornadas_pruebas j,pruebas p WHERE j.jornada=".$num." and j.genero='$genero' and j.categoria=".$categoria." and j.prueba=p.id GROUP BY j.prueba");
+$result = mysqli_query($enlace, "SELECT p.id, p.prueba FROM jornadas_pruebas j,pruebas p, union_categorias uni WHERE j.jornada=".$num." and j.genero='$genero' and j.prueba=p.id and uni.id_nombre = j.categoria and uni.categoria=".$categoria." GROUP BY j.prueba");
 
 
 
