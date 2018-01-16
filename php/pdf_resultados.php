@@ -121,12 +121,9 @@ $tiempo ="";
 $con2 = -1;
 
 //Variable para guadar el puntaje obtenido inicia con el puntaje maximo
-$puntos = 9;
+$puntos = 0;
 		while($row1 = mysqli_fetch_assoc($result1)){
-			//Preguntar si es 8
-			if($puntos == 8){
-				$puntos = $puntos - 1;
-			}
+			
 			$con++;
 				$this->SetFont('Times','',8);
 				
@@ -137,9 +134,11 @@ $puntos = 9;
                         if($con2==-1)
                             $con2 = $con - 1;
                         $this->Cell(3,4,$con2.' ',0,0);
+						$puntos = $this->calcularPuntos($con2);
                     }else{
                         $this->Cell(3,4,$con.' ',0,0);
                         $con2 = -1;
+						$puntos = $this->calcularPuntos($con);
                     }
                 }
 
@@ -383,6 +382,38 @@ function calcularPosicion($id_jornada_prueba, $id_competidor)
 			return $posicion;
 		}
 	}
+}
+
+function calcularPuntos($posicion)
+{
+	$puntos = 0;
+	switch ($posicion) {
+					case 1:
+						$puntos = 9;
+						break;
+					case 2:
+						$puntos = 7;
+						break;
+					case 3:
+						$puntos = 6;
+						break;
+					case 4:
+						$puntos = 5;
+						break;
+					case 5:
+						$puntos = 4;
+						break;
+					case 6:
+						$puntos = 3;
+						break;
+					case 7:
+						$puntos = 2;
+						break;
+					case 8:
+						$puntos = 1;
+						break;
+ }
+ return $puntos;
 }
 
 function PrintChapter( )
