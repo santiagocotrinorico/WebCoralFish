@@ -57,7 +57,7 @@ mysqli_close($enlace);
   	<div class="col-xs-5 col-sm-2 col-md-2">
         <div class="circle-border zoom-in">
 
-            <a href="php/listadoCompetidores.php"><img class="img-circle img-responsive" src="images/pdf.png" alt="service 1"></a>
+            <a href="php/listadoCompetidores.php"><img class="img-circle img-responsive" src="images/pdf.png" alt="service 1"></a>Generar Reporte de Inscritos
         </div>  		
   	</div>
     <i class="fa fa-file-pdf-o"></i>
@@ -100,6 +100,7 @@ mysqli_close($enlace);
             <div class="form-group">
                 <label for="categoria">Categoria</label>
                 <select class="form-control" id="categoria" name="categoria" disabled>
+                	<option value="5">5 años</option>
                 	<option value="6">6 años</option>
                 	<option value="7">7 años</option>
                 	<option value="8">8 años</option>
@@ -111,7 +112,8 @@ mysqli_close($enlace);
                 	<option value="14">14 años</option>
                 	<option value="15">15 años</option>
                 	<option value="16">16 años</option>
-                	<option value="17">17 &amp; 18 años</option>
+                	<option value="17">17 años</option>
+                	<option value="18">18 años</option>
                 	<option value="19">19 &amp; OVER</option>
                 </select>
             </div>
@@ -278,7 +280,7 @@ $(".row").on("change",".tiempo", function(){
     $(this).addClass("bien");
 	}else{
 
-		alert("valor incorrecto solo se permite una expresion así 00.00.00");
+		alert("Valor incorrecto solo se permite una expresion así 00.00.00");
     $(this).removeClass("bien");
 		$(this).addClass("error");
 	}
@@ -299,12 +301,10 @@ function categorioByEdad(FechaNacimiento){
             years--;
         }
 
-        if(years <6){
-            alert("No se permiten menores de 6 años");
-        }else if(years >= 6 && years < 17){
+        if(years <5){
+            alert("No se permiten menores de 5 años");
+        }else if(years >= 5 && years < 19){
             $("#categoria").val(years);
-        }else if(years==17||years==18){
-            $("#categoria").val("17");
         }else{
             $("#categoria").val("19");
         }  
