@@ -1,4 +1,4 @@
-<?php 
+<?php
 include 'php/connect.php';
 session_start();
 
@@ -11,6 +11,8 @@ mysqli_close($enlace);
 ?>
 
 <!DOCTYPE html>
+
+
 <html lang="en">
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
@@ -40,11 +42,11 @@ mysqli_close($enlace);
     <p class="lead">por el Club <?php echo utf8_encode($_SESSION["usuario"]); ?></p>
   </div>
 
-  <div class="row conte"> 
-  	
+  <div class="row conte">
+
 
 <div id="tablaCompetidores">
-    
+
 
 </div>
 
@@ -56,7 +58,6 @@ mysqli_close($enlace);
   <div class="row conte">
   	<div class="col-xs-5 col-sm-2 col-md-2">
         <div class="circle-border zoom-in">
-
             <a href="php/listadoCompetidores.php"><img class="img-circle img-responsive" src="images/pdf.png" alt="service 1"></a>Generar Reporte de Inscritos
         </div>  		
   	</div>
@@ -73,7 +74,7 @@ mysqli_close($enlace);
 
   		<div class="conte">
     	<div class="row">
-		
+
 		<form id="formComperitor"  method="POST">
 
 
@@ -128,14 +129,14 @@ mysqli_close($enlace);
 			<h2 class="section">Pruebas</h2>
 
 			<div id="pruebas">
-				
+
 
 
 			</div>
 
   <button type="submit" class="btn btn-default">Registrar</button>
   <div id="respuestains">
-      
+
 
   </div>
 </form>
@@ -144,8 +145,8 @@ mysqli_close($enlace);
 
 		</div>
 		</div>
-  
- 
+
+
 </div><!-- /.container -->
 	<!-- script references -->
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
@@ -162,24 +163,24 @@ ajaxtabla();
             $("#limite").val(limite);
 			var stringpruebas="";
 			for (var i = 1; i <= limite; i++) {
-				stringpruebas=stringpruebas+"<div class=\"row\"><div class=\"form-group col-xs-6\" id=\"j"+i+"\">               <h4 class=\"section\">Jornada "+i+"</h4><div id=\"select1J"+i+"\"></div><br><div id=\"select2J"+i+"\"> <select class=\"form-control ocultar\" id=\"prueba2"+i+"\" name=\"prueba2"+i+"\"  onchange=\"select2("+i+")\" ><option value=\"0\">Seleccione una Prueba</option></select></div></div>     <div class=\"form-group col-xs-6 ocultar\" id=\"tiempos"+i+"\"> <h4 class=\"section\">Tiempos "+i+"</h4>  <input type=\"text\" class=\"form-control tiempo\" id=\"tiempo1"+i+"\" name=\"tiempo1"+i+"\" placeholder=\"00.00.00\" maxlength=\"8\">  <br>  <input type=\"text\" class=\"form-control tiempo ocultar\" id=\"tiempo2"+i+"\" name=\"tiempo2"+i+"\" placeholder=\"00.00.00\" maxlength=\"8\">         </div></div>";
+        stringpruebas=stringpruebas+"<div class=\"row\"><div class=\"form-group col-xs-6\" id=\"j"+i+"\">               <h4 class=\"section\">Jornada "+i+"</h4><div id=\"select1J"+i+"\"></div><br><div id=\"select2J"+i+"\"> <select class=\"form-control ocultar\" id=\"prueba2"+i+"\" name=\"prueba2"+i+"\"  onchange=\"select2("+i+")\" ><option value=\"0\">Seleccione una Prueba</option></select></div>   <br> <div id=\"select3J"+i+"\"> <select class=\"form-control ocultar\" id=\"prueba3"+i+"\" name=\"prueba3"+i+"\"  onchange=\"select3("+i+")\" ><option value=\"0\">Seleccione una Prueba</option></select></div><br><div id=\"select4J"+i+"\"> <select class=\"form-control ocultar\" id=\"prueba4"+i+"\" name=\"prueba4"+i+"\"  onchange=\"select4("+i+")\" ><option value=\"0\">Seleccione una Prueba</option></select></div> </div> <div class=\"form-group col-xs-6 ocultar\" id=\"tiempos"+i+"\"> <h4 class=\"section\">Tiempos "+i+"</h4>  <input type=\"text\" class=\"form-control tiempo\" id=\"tiempo1"+i+"\" name=\"tiempo1"+i+"\" placeholder=\"00.00.00\" maxlength=\"8\">  <br>  <input type=\"text\" class=\"form-control tiempo ocultar\" id=\"tiempo2"+i+"\" name=\"tiempo2"+i+"\" placeholder=\"00.00.00\" maxlength=\"8\">   <br>  <input type=\"text\" class=\"form-control tiempo ocultar\" id=\"tiempo3"+i+"\" name=\"tiempo3"+i+"\" placeholder=\"00.00.00\" maxlength=\"8\">  <br>  <input type=\"text\" class=\"form-control tiempo ocultar\" id=\"tiempo4"+i+"\" name=\"tiempo4"+i+"\" placeholder=\"00.00.00\" maxlength=\"8\">     </div></div>";
 			};
 
 			$("#fechaNacimiento").change(function(){
 			    categorioByEdad($("#fechaNacimiento").val());
-				
+
 				//mostrar pruebas si cambia categoria
 			  	mostrarPruebas(limite);
 			});
-			
+
 			//Validar si cambia el genero
 			$( "input" ).on( "click", function() {
 			  //alert( $( "input:checked" ).val() + " is checked!" );
-			  
+
 			    //mostrar pruebas si cambia genero
 			  	mostrarPruebas(limite);
 			});
-			
+
 
 			$("#pruebas").html(stringpruebas);
 
@@ -218,7 +219,7 @@ ajaxtabla();
 				  event.preventDefault();
 				 $(".tiempo").each(function(indice,value ){
 					  if($(value).val()!=""){
-						
+
 						if(/((\d\d)\.){2}(\d\d){1}/g.test($(value).val())){
 
 						}else{
@@ -233,7 +234,7 @@ ajaxtabla();
 						data: form1.serialize()+"& categoria="+$("#categoria").val(),
 						success: function (data) {
 							if(data=="exito"){
-								$('#respuestains').text(" El registro fue Exitoso. si desea registrar otro competidor llene nuevamente el formulario"); 
+								$('#respuestains').text(" El registro fue Exitoso. si desea registrar otro competidor llene nuevamente el formulario");
 								$( "body" ).scrollTop( 150 );
 								$("#identificacion").val("");
 								$("#nombres").val("");
@@ -245,14 +246,16 @@ ajaxtabla();
 
 									$("#tiempo1"+i).val("");
 									$("#tiempo2"+i).val("");
+                  $("#tiempo3"+i).val("");
+                  $("#tiempo4"+i).val("");
 									$("#prueba"+i).val(0);
 									select1(i);
 								}
 								  ajaxtabla();
-								  
+
 							}else if(data=="error interno"){
 								$('#respuestains').text(" Error interno intentelo nuevamente ");
-								
+
 							}else {
 								$('#respuestains').text(data);
 							}
@@ -284,7 +287,7 @@ $(".row").on("change",".tiempo", function(){
     $(this).removeClass("bien");
 		$(this).addClass("error");
 	}
-	
+
 });
 
 
@@ -307,7 +310,7 @@ function categorioByEdad(FechaNacimiento){
             $("#categoria").val(years);
         }else{
             $("#categoria").val("19");
-        }  
+        }
 
 }
 
@@ -337,13 +340,25 @@ function select1(num){
 	if($("#prueba"+num).val()>0){
 		$( "#prueba2"+num ).removeClass( "ocultar" ).addClass( "mostrar" );
 		$( "#tiempos"+num ).removeClass( "ocultar" ).addClass( "mostrar" );
-		$("#prueba2"+num).empty();
+
+    $("#prueba2"+num).empty();
 		$("#prueba"+num).find('option').clone().appendTo("#prueba2"+num );
 		$("#prueba2"+num+" option[value="+$("#prueba"+num).val()+"]").remove();
+
 	}else{
-		$("#prueba2"+num ).removeClass( "mostrar" ).addClass( "ocultar" );
+    $("#prueba2"+num).empty();
+    $("#prueba3"+num).empty();
+    $("#prueba4"+num).empty();
+
+    $("#prueba2"+num ).removeClass( "mostrar" ).addClass( "ocultar" );
+    $("#prueba3"+num ).removeClass( "mostrar" ).addClass( "ocultar" );
+    $("#prueba4"+num ).removeClass( "mostrar" ).addClass( "ocultar" );
 		$("#tiempos"+num ).removeClass( "mostrar" ).addClass( "ocultar" );
-		$("#prueba2"+num).empty();
+    $("#tiempo2"+num ).removeClass( "mostrar" ).addClass( "ocultar" );
+    $("#tiempo3"+num ).removeClass( "mostrar" ).addClass( "ocultar" );
+    $("#tiempo4"+num ).removeClass( "mostrar" ).addClass( "ocultar" );
+
+
 	}
 }
 
@@ -351,18 +366,64 @@ function select2(num){
 //alert("el valor del selec es"+$("#Categoria"+num).val());
 
 	if($("#prueba2"+num).val()>0){
-		$( "#tiempo2"+num ).removeClass( "ocultar" ).addClass( "mostrar" );
+
+		$("#tiempo2"+num ).removeClass( "ocultar" ).addClass( "mostrar" );
+
+    if(num == 1)
+    {
+      $("#prueba3"+num ).removeClass( "ocultar" ).addClass( "mostrar" );
+      $("#prueba2"+num).find('option').clone().appendTo("#prueba3"+num );
+      $("#prueba3"+num+" option[value="+$("#prueba2"+num).val()+"]").remove();
+      $("#prueba4"+num).empty();
+    }
+
 	}else{
+
 		$("#tiempo2"+num ).removeClass( "mostrar" ).addClass( "ocultar" );
+
+    if(num == 1)
+    {
+        $("#prueba3"+num ).removeClass( "mostrar" ).addClass( "ocultar" );
+        $("#prueba3"+num).empty();
+        $("#prueba4"+num).empty();
+    }
+	}
+}
+
+function select3(num){
+//alert("el valor del selec es"+$("#Categoria"+num).val());
+
+if($("#prueba3"+num).val()>0){
+    $("#prueba4"+num ).removeClass( "ocultar" ).addClass( "mostrar" );
+    $("#tiempo3"+num ).removeClass( "ocultar" ).addClass( "mostrar" );
+    $("#prueba4"+num).empty();
+    $("#prueba3"+num).find('option').clone().appendTo("#prueba4"+num );
+    $("#prueba4"+num+" option[value="+$("#prueba3"+num).val()+"]").remove();
+  }else{
+
+    $("#prueba4"+num ).removeClass( "mostrar" ).addClass( "ocultar" );
+    $("#tiempo3"+num ).removeClass( "mostrar" ).addClass( "ocultar" );
+    $("#prueba4"+num).empty();
+  }
+}
+
+function select4(num){
+//alert("el valor del selec es"+$("#Categoria"+num).val());
+
+	if($("#prueba4"+num).val()>0){
+		$("#tiempo4"+num ).removeClass( "ocultar" ).addClass( "mostrar" );
+	}else{
+    $("#prueba4"+num ).removeClass( "mostrar" ).addClass( "ocultar" );
+		$("#tiempo4"+num ).removeClass( "mostrar" ).addClass( "ocultar" );
 
 	}
 }
 
 function mostrarPruebas(limite){
-	
+
 	var genero = $( "input:checked" ).val();
 	var categoria = $( "#categoria" ).val();
-	
+
 	if($( "input:checked" ).val()>0)
 	{
 		if(genero==1){
@@ -372,14 +433,20 @@ function mostrarPruebas(limite){
 			}
 			for (var a = 1; a <= limite; a++) {
 				ajaxss(a, genero, categoria);
-				
+
 				select1(a);
 				select2(a);
-			}
-	}	
-	
-}
 
+        if(limite == 1)
+        {
+          select3(a);
+          select4(a);
+        }
+
+			}
+	}
+
+}
 
 
 </script>
