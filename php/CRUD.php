@@ -1,4 +1,4 @@
-<?php 
+<?php
 include 'connect.php';
 if($_POST){
 
@@ -13,7 +13,7 @@ if($_POST){
 
 			if (mysqli_query($enlace, "INSERT INTO competidor(identificacion, nombres, apellidos, email, telefono, fecha_nacimineto,genero, nombre_contacto, telefono_contacto) VALUES (\"".$_POST['identificacion']."\",\"".$_POST['nombres']."\",\"".$_POST['apellidos']."\",\"\",\"\",\"".$_POST['fechaNacimiento']."\",\"".$genero."\",\"\",\"\")") === TRUE) {
 
-				if (mysqli_query($enlace, "INSERT INTO categoria_com(categoria, identificacion) VALUES (".$_POST['categoria'].",\"".$_POST['identificacion']."\")") === TRUE) { 
+				if (mysqli_query($enlace, "INSERT INTO categoria_com(categoria, identificacion) VALUES (".$_POST['categoria'].",\"".$_POST['identificacion']."\")") === TRUE) {
 
 						for($i=1; $i<=$_POST["limite"]; $i++){
 
@@ -24,19 +24,36 @@ if($_POST){
 								}else{
 									insertPruebas($_POST["club"],$_POST["identificacion"],$_POST["prueba".$i],$_POST["tiempo1".$i]);
 								}
-								
+
 								if($_POST["prueba2".$i]!=0){
 									if($_POST["tiempo2".$i]==""){
 										insertPruebas($_POST["club"],$_POST["identificacion"],$_POST["prueba2".$i],"59.59.99");
 									}else{
 										insertPruebas($_POST["club"],$_POST["identificacion"],$_POST["prueba2".$i],$_POST["tiempo2".$i]);
 									}
-									
+
 								}
-								
+
+								if($_POST["prueba3".$i]!=0){
+									if($_POST["tiempo3".$i]==""){
+										insertPruebas($_POST["club"],$_POST["identificacion"],$_POST["prueba3".$i],"59.59.99");
+									}else{
+										insertPruebas($_POST["club"],$_POST["identificacion"],$_POST["prueba3".$i],$_POST["tiempo3".$i]);
+									}
+
+								}
+
+								if($_POST["prueba4".$i]!=0){
+									if($_POST["tiempo4".$i]==""){
+										insertPruebas($_POST["club"],$_POST["identificacion"],$_POST["prueba4".$i],"59.59.99");
+									}else{
+										insertPruebas($_POST["club"],$_POST["identificacion"],$_POST["prueba4".$i],$_POST["tiempo4".$i]);
+									}
+								}
+
 							}
 
-						}//fin for	
+						}//fin for
 				}
 				echo "exito";
 			}else{
@@ -47,7 +64,7 @@ if($_POST){
 
 //fin insercompetidor
 	}if($_POST["operacion"]=="updateCompetidor"){
-        mysqli_query($enlace,"UPDATE categoria_com SET categoria=".$_POST['categoria']." WHERE identificacion=\"".$_POST['identificacion']."\""); 
+        mysqli_query($enlace,"UPDATE categoria_com SET categoria=".$_POST['categoria']." WHERE identificacion=\"".$_POST['identificacion']."\"");
 			deliteCompetidor($_POST["identificacion"]);
 
 				for($i=1; $i<=$_POST["limite"]; $i++){
@@ -59,16 +76,16 @@ if($_POST){
 						}else{
 							insertPruebas($_POST["club"],$_POST["identificacion"],$_POST["prueba".$i],$_POST["tiempo1".$i]);
 						}
-						
+
 						if($_POST["prueba2".$i]!=0){
 							if($_POST["tiempo2".$i]==""){
 								insertPruebas($_POST["club"],$_POST["identificacion"],$_POST["prueba2".$i],"59.59.99");
 							}else{
 								insertPruebas($_POST["club"],$_POST["identificacion"],$_POST["prueba2".$i],$_POST["tiempo2".$i]);
 							}
-							
+
 						}
-						
+
 					}
 
 				}//fin for
@@ -89,14 +106,14 @@ $sql="SELECT cdor.identificacion, cdor.nombres, cdor.apellidos, cdor.genero FROM
 		    /* obtener array asociativo */
 		    $i=0;
 		    while ($row1 = mysqli_fetch_assoc($result1)) {
-		      $i++;  
+		      $i++;
 		      $enviar=$enviar."<tr><td>".$i."</td><td>".$row1["identificacion"]."</td><td>".$row1["nombres"]."</td><td>".$row1["apellidos"]."</td><td>".$row1["genero"]."</td></tr>";
 		    }
 
 		    $enviar=$enviar."</tbody></table>";
 		    echo $enviar;
-		    
-		    
+
+
 
 
 	}elseif($_GET["opera"]=="competidor"){
@@ -122,7 +139,7 @@ $sql="SELECT cdor.identificacion, cdor.nombres, cdor.apellidos, cdor.genero FROM
 
 
 		    }
-		   
+
 		echo "{\"competidor\":[".json_encode($competidor, JSON_PRETTY_PRINT)."]}";
 
 	}
@@ -136,7 +153,7 @@ function insertPruebas($club, $competidor, $prueba, $tiempo){
 //echo "<br>INSERT INTO competencia(club, competidor, prueba, tiempo) VALUES (".$club.",\"".$competidor."\",". $prueba.",\"".$tiempo."\")";
 
 			if (mysqli_query($enlace, "INSERT INTO competencia(club, competidor, prueba, tiempo) VALUES (".$club.",\"".$competidor."\",". $prueba.",\"".$tiempo."\")") === TRUE) {
-			    
+
 			}else{
 				echo "error interno";
 			}
@@ -145,9 +162,9 @@ function insertPruebas($club, $competidor, $prueba, $tiempo){
 
 function deliteCompetidor($competidor){
 	global $enlace;
-	
+
 				if (mysqli_query($enlace, "DELETE FROM competencia WHERE competidor=\"".$competidor."\"") === TRUE) {
-			    
+
 			}else{
 				echo "error interno";
 			}
