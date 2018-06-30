@@ -58,7 +58,7 @@ mysqli_close($enlace);
   <div class="row conte">
   	<div class="col-xs-5 col-sm-2 col-md-2">
         <div class="circle-border zoom-in">
-            <a href="php/listadoCompetidores.php"><img class="img-circle img-responsive" src="images/pdf.png" alt="service 1"></a>Generar Reporte de Inscritos
+            <a href="php/listadoCompetidores.php"><img class="img-circle img-responsive" src="images/pdf.png" alt="service 1">Generar Reporte de Inscritos</a>
         </div>  		
   	</div>
     <i class="fa fa-file-pdf-o"></i>
@@ -87,11 +87,11 @@ mysqli_close($enlace);
                 <input type="text" class="form-control" id="identificacion" name="identificacion" placeholder="Identificación / Ficha Fecna" required>
             </div>
             <div class="form-group">
-                <label for="nombres">Nombres</label>
+                <label for="nombres">Primer Nombre</label>
                 <input type="text" class="form-control" id="nombres" name="nombres"  required>
             </div>
             <div class="form-group">
-                <label for="apellidos">Apellidos</label>
+                <label for="apellidos">Primer Apellido</label>
                 <input type="text" class="form-control" id="apellidos" name="apellidos" required>
             </div>
             <div class="form-group">
@@ -101,6 +101,7 @@ mysqli_close($enlace);
             <div class="form-group">
                 <label for="categoria">Categoria</label>
                 <select class="form-control" id="categoria" name="categoria" disabled>
+                	<option value="4">4 años</option>
                 	<option value="5">5 años</option>
                 	<option value="6">6 años</option>
                 	<option value="7">7 años</option>
@@ -127,6 +128,7 @@ mysqli_close($enlace);
             </div>
 
 			<h2 class="section">Pruebas</h2>
+			<p>* Recuerda que la Jornada 1 es para exhibición y Jornada 2-3 para menores, infantiles, juveniles y mayores.</p>
 
 			<div id="pruebas">
 
@@ -290,23 +292,21 @@ $(".row").on("change",".tiempo", function(){
 
 });
 
-
-
 function categorioByEdad(FechaNacimiento){
         var birthday = new Date(FechaNacimiento);
-        var today = new Date();
-        var years = today.getFullYear() - birthday.getFullYear();
+        var finAnio = new Date("2018-12-31");
+        var years = finAnio.getFullYear() - birthday.getFullYear();
 
-        birthday.setFullYear(today.getFullYear());
+        birthday.setFullYear(finAnio.getFullYear());
 
-        if (today < birthday)
+        if (finAnio < birthday)
         {
             years--;
         }
 
-        if(years <5){
-            alert("No se permiten menores de 5 años");
-        }else if(years >= 5 && years < 19){
+        if(years <4){
+            alert("No se permiten menores de 4 años");
+        }else if(years >= 4 && years < 19){
             $("#categoria").val(years);
         }else{
             $("#categoria").val("19");

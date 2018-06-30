@@ -13,7 +13,7 @@ function Header()
 {
 
     // Logo
-    $this->Image('../images/LogoCaribes.png',20,8,25);
+    $this->Image('../images/logos/LogoCCMeta.png',20,8,25);
     // Arial bold 15
     $this->SetFont('Arial','B',15);
     // Movernos a la derecha
@@ -21,14 +21,14 @@ function Header()
     // Título
     $this->Cell(180,10,utf8_decode('Reporte de Inscripción'),0,1,'C');
     $this->SetFont('Arial','',12);
-    $this->Cell(180,5,utf8_decode('I Festi-Torneo de Natación Caribes'),0,1,'C');
-    $this->Cell(180,5,'Octubre 28 de 2017',0,1,'C');
+    $this->Cell(180,5,utf8_decode('Festival Intercolegiados de Natación Corp. Club Meta'),0,1,'C');
+    $this->Cell(180,5,'Junio 15 de 2018',0,1,'C');
     $this->Ln(1);
     $this->SetFont('Arial','',10);
     $this->Cell(6);
     $this->Cell(180,5,' Listado de competidores del Club '.$_SESSION["usuario"],'B',1,'C');
     // Salto de línea
-     $this->Cell(180,5,utf8_decode(' Sistema de Información Coral Fish - SIFOC '),0,1,'C');
+     $this->Cell(180,5,utf8_decode(' Sistema de Información Coral Fish - SICOF '),0,1,'C');
     $this->Ln(10);
     $this->y0 = $this->GetY();
 }

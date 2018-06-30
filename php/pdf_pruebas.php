@@ -11,21 +11,21 @@ function Header()
 {
 
     // Logo
-    $this->Image('../images/logos/LogoCoralFish.png',20,8,25);
+    $this->Image('../images/logos/LogoCCMeta.png',20,8,25);
     // Arial bold 15
     $this->SetFont('Arial','B',15);
     // Movernos a la derecha
     //$this->Cell(0);
     // Título
-    $this->Cell(180,10,utf8_decode('CORAL FISH'),0,1,'C');
+    $this->Cell(180,10,utf8_decode('CORPORACIÓN CLUB META'),0,1,'C');
     $this->SetFont('Arial','',12);
-    $this->Cell(180,5,utf8_decode('VII Festival de Natación 2018'),0,1,'C');
-    $this->Cell(180,5,'Mayo 25 y 26 de 2018',0,1,'C');
+    $this->Cell(180,5,utf8_decode('Festival Intercolegiados de Natación'),0,1,'C');
+    $this->Cell(180,5,'Junio 15 de 2018',0,1,'C');
     $this->Ln(1);
     $this->SetFont('Arial','',10);
     $this->Cell(6);
     $this->Cell(180,5,utf8_decode('Calentamiento: 07:00 a.m. Sesión Competencias: 08:30 a.m. / Piscina 25 mts'),'B',1,'C');
-    $this->Cell(180,5,utf8_decode('Piscinas Olímpicas, Complejo Deportivo José Eustasio Rivera - Villavicencio (Meta)'),'0',1,'C');
+    $this->Cell(180,5,utf8_decode('Piscina Corporación Club Meta - Villavicencio (Meta)'),'B',1,'C');
     // Salto de línea
     $this->Ln(10);
     $this->y0 = $this->GetY();
